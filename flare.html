@@ -283,9 +283,10 @@
           show(animationContainer);
           logoContainer.classList.add('hidden-background');
 
+          var evtName = typeof document.webkitHidden === typeof !1 ? 'webkitAnimationEnd' : 'animationend';
           // animationend => webkitAnimationEnd
           function onAnimationEnd() {
-              frames.removeEventListener('animationend', onAnimationEnd);
+              frames.removeEventListener(evtName, onAnimationEnd);
               frames.classList.remove('animate');
               hide(animationContainer);
               logoContainer.classList.remove('hidden-background');
@@ -301,7 +302,7 @@
               }
           }
           var frames = animation.querySelector('.frames');
-          frames.addEventListener('animationend', onAnimationEnd);
+          frames.addEventListener(evtName, onAnimationEnd);
           frames.classList.add('animate');
       }
       runAnimation.queue = [];
