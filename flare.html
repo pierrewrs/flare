@@ -34,6 +34,7 @@
       pointer-events: none;
       opacity: 1;
       display: inline-block;
+      -webkit-transition-property: opacity;
       transition-property: opacity;
   }
 
@@ -67,6 +68,7 @@
       position: absolute;
       top: 0px;
       left: 0px;
+      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
   }
 
@@ -76,6 +78,10 @@
   }
 
   #animation-container-1 .heart .frames.animate {
+      -webkit-animation-name: heart;
+      -webkit-animation-duration: 2.5s;
+      -webkit-animation-timing-function: steps(26, end);
+      -webkit-animation-fill-mode: none;
       transform: translate3d(-6084px,0,0);
       animation-name: heart;
       animation-duration: 2.5s;
@@ -100,6 +106,15 @@
       background-image: url(./6b64542c-5b48-4fe1-8022-ec6831e61d16.png);
   }
 
+  @-webkit-keyframes heart {
+      0% {
+          transform: translate3d(0,0,0);
+      }
+      100% {
+          transform: translate3d(-6084px,0,0);
+      }
+  }
+
   @keyframes heart {
       0% {
           transform: translate3d(0,0,0);
@@ -115,6 +130,10 @@
   }
 
   #animation-container-1 .flare .frames.animate {
+      -webkit-animation-name: flare;
+      -webkit-animation-duration: 2.6s;
+      -webkit-animation-timing-function: steps(30, end);
+      -webkit-animation-fill-mode: none;
       transform: translate3d(-19680px,0,0);
       animation-name: flare;
       animation-duration: 2.6s;
@@ -141,6 +160,15 @@
 
   #animation-container-1 .flare3 {
       background-image: url(./9bd80174-fa00-4690-8a7a-a2d8f5dc10c2.png);
+  }
+
+  @-webkit-keyframes flare {
+      0% {
+          transform: translate3d(0,0,0);
+      }
+      100% {
+          transform: translate3d(-19680px,0,0);
+      }
   }
 
   @keyframes flare {
@@ -238,6 +266,7 @@
                       runAnimation(flareAnimation);
                   // }
               }, 4500);
+              console.log('haha animate!');
           });
       });
 
@@ -254,6 +283,7 @@
           show(animationContainer);
           logoContainer.classList.add('hidden-background');
 
+          // animationend => webkitAnimationEnd
           function onAnimationEnd() {
               frames.removeEventListener('animationend', onAnimationEnd);
               frames.classList.remove('animate');
