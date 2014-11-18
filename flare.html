@@ -191,8 +191,8 @@
 </head>
 <body>
 <div id="brandLogo" class="anniversary"><div id="animation-container-1">
-    <div class="animation-clip flare" style="opacity: 1;">
-      <div class="frames animate">
+    <div class="animation-clip flare">
+      <div class="frames">
         <div class="flare1"></div>
         <div class="flare2"></div>
         <div class="flare3"></div>
@@ -235,10 +235,10 @@
   // (function() {
       'strict';
 
-      // var hasClickedShare = false;
-
       var logoContainer = document.getElementById('brandLogo');
       var message = document.querySelector('.message');
+
+      var flareLoaded = false;
       var heartLoaded = false;
 
       var animationContainer = document.getElementById('animation-container-1');
@@ -254,43 +254,45 @@
       var heart1 = new Image();
       var heart2 = new Image();
 
+      // Make sure the images are loaded
+      var heartUrls = [
+          './c12e85c8-e841-4b16-bb9d-8dddde1e98d8.png',
+          './6b64542c-5b48-4fe1-8022-ec6831e61d16.png',
+      ];
+      loadImages(heartUrls, function() {
+          heartLoaded = true;
+      });
+      var flareUrls = [
+          './7d21c69b-2133-407f-a83e-5b7f397d6d1f.png',
+          './63daebba-4306-44ca-bfcf-dda228c00d31.png',
+          './9bd80174-fa00-4690-8a7a-a2d8f5dc10c2.png',
+      ];
+      loadImages(flareUrls, function() {
+        flareLoaded = true;
+      });
+
+      logoContainer.classList.add('anniversary');
+
       logoContainer.addEventListener('click', function(e) {
+        e.stopPropagation();
         if (heartLoaded) {
             runAnimation(heartAnimation);
         }
         postShare();
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation && e.stopImmediatePropagation();
       });
 
       document.addEventListener('click', function(e) {
-          logoContainer.classList.add('anniversary');
-          logoContainer.appendChild(animationContainer);
-
-          // Make sure the images are loaded
-          var heartUrls = [
-              './c12e85c8-e841-4b16-bb9d-8dddde1e98d8.png',
-              './6b64542c-5b48-4fe1-8022-ec6831e61d16.png',
-          ];
-          loadImages(heartUrls, function() {
-              heartLoaded = true;
-          });
-
-          var flareUrls = [
-              './7d21c69b-2133-407f-a83e-5b7f397d6d1f.png',
-              './63daebba-4306-44ca-bfcf-dda228c00d31.png',
-              './9bd80174-fa00-4690-8a7a-a2d8f5dc10c2.png',
-          ];
-          loadImages(flareUrls, function() {
-              setTimeout(function(){
-                  // if (!hasClickedShare) {
-                      runAnimation(flareAnimation);
-                  // }
-              }, 4500);
-              console.log('haha animate!');
-          });
+        if(flareLoaded){
+          runAnimation(flareAnimation);
+        }
+        console.log('haha animate!');
       });
+
+      setTimeout(function() {
+        if (flareLoaded) {
+          runAnimation(flareAnimation);
+        }
+      }, 1000);
 
       function runAnimation(animation, force) {
           if (runAnimation.animating && !force) {
@@ -305,8 +307,9 @@
           show(animationContainer);
           logoContainer.classList.add('hidden-background');
 
-          var evtName = typeof document.webkitHidden === typeof !1 ? 'webkitAnimationEnd' : 'animationend';
           // animationend => webkitAnimationEnd
+          var evtName = typeof document.webkitHidden === typeof !1 ? 'webkitAnimationEnd' : 'animationend';
+          var frames = animation.querySelector('.frames');
           function onAnimationEnd() {
               frames.removeEventListener(evtName, onAnimationEnd);
               frames.classList.remove('animate');
@@ -323,7 +326,6 @@
                   runAnimation.animating = false;
               }
           }
-          var frames = animation.querySelector('.frames');
           frames.addEventListener(evtName, onAnimationEnd);
           frames.classList.add('animate');
       }
